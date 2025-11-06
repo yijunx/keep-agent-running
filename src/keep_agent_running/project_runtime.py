@@ -4,6 +4,7 @@ from typing import Type
 from openai import OpenAI
 
 from src.keep_agent_running.utils import PydanticConverter, LLMConfig
+from abc import ABC, abstractmethod
 
 
 
@@ -30,7 +31,18 @@ class Streamer:
         print(message)
 
 
-class TaskHandler:
+
+class TaskHandler(ABC):
+
+    @abstractmethod
+    def handle(self, task: Task) -> str:
+        pass
+
+    @abstractmethod
+    def provide_description(self) -> str:
+        pass
+
+class LLMTaskHandler(TaskHandler):
     def __init__(
         self,
         llm_config: LLMConfig,
@@ -52,12 +64,25 @@ class TaskHandler:
         )
         return response.choices[0].message.content
 
+    def provide_description(self) -> str:
+        return self.description
+
+
+class WebSearchTaskHandler(TaskHandler):
+    def __init__(
+        self,
+        web_search_config: WebSearchConfig,
+        description: str,
+        system_prompt: str
+    ):
+        self.web_search_config = web_search_config
+        self.description = description
 
 
 def run_project(
     orchestration_task_handler: TaskHandler,  # how to do it
     task_assignment_handler: TaskHandler,  # how to assign tasks to resources
-    initial_task: Task,  # what to do
+    initial_task: Task,  # what to do, the goal
     task_handlers: list[TaskHandler],  # what resources can be used
     convergence_manager: ConvergenceManager,  # how to stop
     streamer: Streamer,  # how to stream the stuff out
