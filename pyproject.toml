@@ -20,8 +20,10 @@ classifiers = [
 keywords = ["ai", "agents", "orchestration", "dfs", "bfs", "multi-agent", "automation"]
 
 dependencies = [
+    "openai>=2.7.1",
     "playwright>=1.55.0",
     "pydantic-settings>=2.11.0",
+    "pytest>=8.4.2",
     "python-dotenv>=1.1.1",
 ]
 
