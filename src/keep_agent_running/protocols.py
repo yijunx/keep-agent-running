@@ -12,6 +12,7 @@ from datetime import datetime
 
 class TaskStatus(Enum):
     """Task execution status"""
+
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"
@@ -21,6 +22,7 @@ class TaskStatus(Enum):
 
 class TaskPriority(Enum):
     """Task priority levels"""
+
     LOW = 1
     NORMAL = 2
     HIGH = 3
@@ -29,6 +31,7 @@ class TaskPriority(Enum):
 
 class ExecutionStrategy(Enum):
     """Execution strategy for task traversal"""
+
     DFS = "dfs"
     BFS = "bfs"
     HYBRID = "hybrid"
@@ -37,6 +40,7 @@ class ExecutionStrategy(Enum):
 @dataclass
 class TaskResult:
     """Result of task execution"""
+
     success: bool
     artifacts: List[Any]
     new_tasks: List["Task"]
@@ -49,6 +53,7 @@ class TaskResult:
 @dataclass
 class Situation:
     """Current situation/context of the runtime"""
+
     current_task_count: int
     completed_tasks: int
     failed_tasks: int
@@ -129,7 +134,9 @@ class User(Protocol):
 class ConvergenceManager(Protocol):
     """Protocol for managing task convergence and termination"""
 
-    def should_terminate(self, situation: Situation, runtime_config: Dict[str, Any]) -> bool:
+    def should_terminate(
+        self, situation: Situation, runtime_config: Dict[str, Any]
+    ) -> bool:
         """Determine if execution should terminate"""
         ...
 
@@ -189,7 +196,9 @@ class Verifier(Protocol):
         """Validate result quality (0.0 to 1.0)"""
         ...
 
-    def check_goal_satisfaction(self, original_query: str, current_artifacts: List[Any]) -> float:
+    def check_goal_satisfaction(
+        self, original_query: str, current_artifacts: List[Any]
+    ) -> float:
         """Check how well current artifacts satisfy the original goal"""
         ...
 
@@ -217,8 +226,12 @@ class TreeStructure(Protocol):
 class TaskRouter(Protocol):
     """Protocol for routing tasks to appropriate handlers"""
 
-    def route_task(self, task: Task, available_ves: List[VirtualEnvironment],
-                   available_users: List[User]) -> Union[VirtualEnvironment, User]:
+    def route_task(
+        self,
+        task: Task,
+        available_ves: List[VirtualEnvironment],
+        available_users: List[User],
+    ) -> Union[VirtualEnvironment, User]:
         """Route a task to the most appropriate handler"""
         ...
 
@@ -230,15 +243,17 @@ class TaskRouter(Protocol):
 class RuntimeEngine(ABC):
     """Abstract base class for the main runtime engine"""
 
-    def __init__(self,
-                 orchestration_models: str,
-                 object_or_query: str,
-                 ves_models: List[VirtualEnvironment],
-                 expert_allowed: List[User],
-                 stop_criteria: Dict[str, Any],
-                 convergence_manager: ConvergenceManager,
-                 loop_prevention: LoopDetector,
-                 context_manager: SharedContext):
+    def __init__(
+        self,
+        orchestration_models: str,
+        object_or_query: str,
+        ves_models: List[VirtualEnvironment],
+        expert_allowed: List[User],
+        stop_criteria: Dict[str, Any],
+        convergence_manager: ConvergenceManager,
+        loop_prevention: LoopDetector,
+        context_manager: SharedContext,
+    ):
 
         self.orchestration_models = orchestration_models
         self.object_or_query = object_or_query
@@ -277,7 +292,9 @@ class RuntimeEngine(ABC):
         pass
 
     @abstractmethod
-    async def handle_task_automated(self, task: Task, ve: VirtualEnvironment) -> TaskResult:
+    async def handle_task_automated(
+        self, task: Task, ve: VirtualEnvironment
+    ) -> TaskResult:
         """Handle a task through automated VE"""
         pass
 

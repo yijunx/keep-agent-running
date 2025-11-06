@@ -10,15 +10,27 @@ import uuid
 from dataclasses import dataclass, field
 
 from .protocols import (
-    Task, TaskStatus, TaskPriority, TaskResult, Situation,
-    VirtualEnvironment, User, ConvergenceManager, LoopDetector,
-    SharedContext, Verifier, TreeStructure, TaskRouter, RuntimeEngine
+    Task,
+    TaskStatus,
+    TaskPriority,
+    TaskResult,
+    Situation,
+    VirtualEnvironment,
+    User,
+    ConvergenceManager,
+    LoopDetector,
+    SharedContext,
+    Verifier,
+    TreeStructure,
+    TaskRouter,
+    RuntimeEngine,
 )
 
 
 @dataclass
 class MockTask:
     """Mock implementation of Task protocol"""
+
     id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
     description: str = ""
     status: TaskStatus = TaskStatus.PENDING
@@ -37,7 +49,7 @@ class MockTask:
         return {
             "id": self.id,
             "description": self.description,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
 
     def update_status(self, status: TaskStatus, message: Optional[str] = None) -> None:
@@ -52,6 +64,7 @@ class MockTask:
 @dataclass
 class MockVE:
     """Mock implementation of VirtualEnvironment protocol"""
+
     name: str
     model_type: str = "mock-model"
     capabilities: List[str] = field(default_factory=lambda: ["reasoning", "coding"])
@@ -71,8 +84,7 @@ class MockVE:
         # Sometimes create subtasks (simulate branching)
         if "complex" in task.description.lower():
             subtask = MockTask(
-                description=f"Subtask of {task.description}",
-                parent_task_id=task.id
+                description=f"Subtask of {task.description}", parent_task_id=task.id
             )
             new_tasks.append(subtask)
             print(f"   📋 Created subtask: {subtask.id}")
@@ -83,7 +95,7 @@ class MockVE:
             new_tasks=new_tasks,
             messages=[f"Completed by {self.name}"],
             metadata={"handler": self.name, "model": self.model_type},
-            execution_time=0.1
+            execution_time=0.1,
         )
 
         print(f"   ✅ Task completed successfully")
@@ -93,7 +105,7 @@ class MockVE:
         return {
             "name": self.name,
             "available": self.is_available,
-            "load": self.load_factor
+            "load": self.load_factor,
         }
 
     def can_handle_task(self, task: Task) -> bool:
@@ -107,6 +119,7 @@ class MockVE:
 @dataclass
 class MockUser:
     """Mock implementation of User protocol"""
+
     id: str
     name: str
     expertise: List[str] = field(default_factory=lambda: ["general"])
@@ -125,7 +138,7 @@ class MockUser:
             new_tasks=[],
             messages=[f"Reviewed and approved by {self.name}"],
             metadata={"handler": self.name, "type": "human"},
-            execution_time=0.2
+            execution_time=0.2,
         )
 
         print(f"   ✅ Human review completed")
@@ -133,7 +146,10 @@ class MockUser:
 
     def can_handle_task(self, task: Task) -> bool:
         # Humans can handle tasks requiring their expertise
-        task_needs_human = "review" in task.description.lower() or "critical" in task.description.lower()
+        task_needs_human = (
+            "review" in task.description.lower()
+            or "critical" in task.description.lower()
+        )
         can_handle = self.is_available and task_needs_human
         if can_handle:
             print(f"👤 Human '{self.name}' can handle task {task.id}")
@@ -143,15 +159,17 @@ class MockUser:
 class MockConvergenceManager:
     """Mock implementation of ConvergenceManager protocol"""
 
-    def should_terminate(self, situation: Situation, runtime_config: Dict[str, Any]) -> bool:
+    def should_terminate(
+        self, situation: Situation, runtime_config: Dict[str, Any]
+    ) -> bool:
         # Check various termination criteria
         token_limit = runtime_config.get("token_limit", 1000000)
         time_limit = runtime_config.get("time_limit", 3600)
 
         should_stop = (
-            situation.total_tokens_used > token_limit or
-            situation.execution_time > time_limit or
-            (situation.current_task_count == 0 and situation.completed_tasks > 0)
+            situation.total_tokens_used > token_limit
+            or situation.execution_time > time_limit
+            or (situation.current_task_count == 0 and situation.completed_tasks > 0)
         )
 
         if should_stop:
@@ -175,7 +193,11 @@ class MockConvergenceManager:
         if situation.completed_tasks == 0:
             return 0.0
 
-        total_tasks = situation.completed_tasks + situation.failed_tasks + situation.current_task_count
+        total_tasks = (
+            situation.completed_tasks
+            + situation.failed_tasks
+            + situation.current_task_count
+        )
         progress = situation.completed_tasks / total_tasks if total_tasks > 0 else 0.0
 
         print(f"📈 Progress score: {progress:.2f}")
@@ -229,7 +251,7 @@ class MockSharedContext:
         self.conventions: Dict[str, Any] = {
             "coding_style": "python-black",
             "test_framework": "pytest",
-            "documentation": "google-style"
+            "documentation": "google-style",
         }
 
     def get_shared_knowledge(self) -> Dict[str, Any]:
@@ -259,7 +281,9 @@ class MockVerifier:
         print(f"⭐ Result quality score: {quality}")
         return quality
 
-    def check_goal_satisfaction(self, original_query: str, current_artifacts: List[Any]) -> float:
+    def check_goal_satisfaction(
+        self, original_query: str, current_artifacts: List[Any]
+    ) -> float:
         # Mock satisfaction based on number of artifacts
         satisfaction = min(len(current_artifacts) * 0.3, 1.0)
         print(f"🎯 Goal satisfaction: {satisfaction:.2f}")
@@ -296,7 +320,9 @@ class MockTreeStructure:
                 return 1
             return 1 + max(get_depth(child_id) for child_id in children)
 
-        root_tasks = [tid for tid, task in self.tasks.items() if task.parent_task_id is None]
+        root_tasks = [
+            tid for tid, task in self.tasks.items() if task.parent_task_id is None
+        ]
         depth = max(get_depth(root_id) for root_id in root_tasks) if root_tasks else 0
         print(f"🌳 Tree depth: {depth}")
         return depth
@@ -308,8 +334,12 @@ class MockTreeStructure:
 class MockTaskRouter:
     """Mock implementation of TaskRouter protocol"""
 
-    def route_task(self, task: Task, available_ves: List[VirtualEnvironment],
-                   available_users: List[User]) -> Optional[Any]:
+    def route_task(
+        self,
+        task: Task,
+        available_ves: List[VirtualEnvironment],
+        available_users: List[User],
+    ) -> Optional[Any]:
         print(f"🚦 Routing task {task.id}: {task.description}")
 
         # First try human experts for critical tasks
@@ -352,7 +382,7 @@ class MockProjectRuntime(RuntimeEngine):
             execution_time=0.0,
             active_agents=0,
             last_update=datetime.now(),
-            status_summary="Initialized"
+            status_summary="Initialized",
         )
 
         print(f"   ✅ Runtime initialized")
@@ -364,16 +394,16 @@ class MockProjectRuntime(RuntimeEngine):
         tasks = [
             MockTask(
                 description=f"Analyze requirements for: {self.object_or_query}",
-                priority=TaskPriority.HIGH
+                priority=TaskPriority.HIGH,
             ),
             MockTask(
                 description=f"Design solution architecture",
-                priority=TaskPriority.NORMAL
+                priority=TaskPriority.NORMAL,
             ),
             MockTask(
                 description=f"Create complex implementation plan",
-                priority=TaskPriority.NORMAL
-            )
+                priority=TaskPriority.NORMAL,
+            ),
         ]
 
         for task in tasks:
@@ -441,7 +471,7 @@ class MockProjectRuntime(RuntimeEngine):
             state_snapshot = {
                 "task_count": len(self.tasks),
                 "completed": self.current_situation.completed_tasks,
-                "failed": self.current_situation.failed_tasks
+                "failed": self.current_situation.failed_tasks,
             }
             self.loop_prevention.record_state(state_snapshot)
 
@@ -451,7 +481,9 @@ class MockProjectRuntime(RuntimeEngine):
 
         print(f"\n🏁 Task execution loop completed after {iteration} iterations")
 
-    async def handle_task_automated(self, task: Task, ve: VirtualEnvironment) -> TaskResult:
+    async def handle_task_automated(
+        self, task: Task, ve: VirtualEnvironment
+    ) -> TaskResult:
         print(f"🤖 Handling task via automation...")
         return await ve.execute_task(task)
 
@@ -464,10 +496,20 @@ class MockProjectRuntime(RuntimeEngine):
             return
 
         # Count task statuses
-        completed = len([t for t in self.execution_graph.tasks.values()
-                        if t.status == TaskStatus.COMPLETED])
-        failed = len([t for t in self.execution_graph.tasks.values()
-                     if t.status == TaskStatus.FAILED])
+        completed = len(
+            [
+                t
+                for t in self.execution_graph.tasks.values()
+                if t.status == TaskStatus.COMPLETED
+            ]
+        )
+        failed = len(
+            [
+                t
+                for t in self.execution_graph.tasks.values()
+                if t.status == TaskStatus.FAILED
+            ]
+        )
 
         # Update situation
         self.current_situation.current_task_count = len(self.tasks)
@@ -475,13 +517,14 @@ class MockProjectRuntime(RuntimeEngine):
         self.current_situation.failed_tasks = failed
         self.current_situation.total_tokens_used += 1000  # Mock token usage
         self.current_situation.execution_time = (
-            (datetime.now() - self.start_time).total_seconds()
-            if self.start_time else 0
+            (datetime.now() - self.start_time).total_seconds() if self.start_time else 0
         )
         self.current_situation.last_update = datetime.now()
 
-        print(f"📊 Situation updated - Tasks: {len(self.tasks)} pending, "
-              f"{completed} completed, {failed} failed")
+        print(
+            f"📊 Situation updated - Tasks: {len(self.tasks)} pending, "
+            f"{completed} completed, {failed} failed"
+        )
 
     def should_continue(self) -> bool:
         if not self.current_situation:
@@ -489,8 +532,7 @@ class MockProjectRuntime(RuntimeEngine):
 
         # Check convergence criteria
         should_stop = self.convergence_manager.should_terminate(
-            self.current_situation,
-            self.stop_criteria
+            self.current_situation, self.stop_criteria
         )
 
         return not should_stop and len(self.tasks) > 0
@@ -506,7 +548,7 @@ class MockProjectRuntime(RuntimeEngine):
             "artifacts_generated": len(self.artifacts_generated),
             "execution_time": self.current_situation.execution_time,
             "tree_depth": self.execution_graph.get_tree_depth(),
-            "final_situation": self.current_situation
+            "final_situation": self.current_situation,
         }
 
         print(f"   ✅ Total tasks: {final_results['total_tasks']}")

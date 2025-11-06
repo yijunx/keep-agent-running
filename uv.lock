@@ -482,6 +482,7 @@ name = "keep-agent-running"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "black" },
     { name = "openai" },
     { name = "playwright" },
     { name = "pydantic-settings" },
@@ -506,6 +507,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
+    { name = "black", specifier = ">=25.9.0" },
     { name = "black", marker = "extra == 'dev'", specifier = ">=23.0" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.5" },
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.0" },

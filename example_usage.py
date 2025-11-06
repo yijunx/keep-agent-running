@@ -58,9 +58,15 @@ def main():
 
     # Show API key status (without revealing actual keys)
     print("🔑 API Keys Status:")
-    print(f"  OpenAI: {'✅ Configured' if settings.api.openai_api_key else '❌ Missing'}")
-    print(f"  Anthropic: {'✅ Configured' if settings.api.anthropic_api_key else '❌ Missing'}")
-    print(f"  Google: {'✅ Configured' if settings.api.google_api_key else '❌ Missing'}")
+    print(
+        f"  OpenAI: {'✅ Configured' if settings.api.openai_api_key else '❌ Missing'}"
+    )
+    print(
+        f"  Anthropic: {'✅ Configured' if settings.api.anthropic_api_key else '❌ Missing'}"
+    )
+    print(
+        f"  Google: {'✅ Configured' if settings.api.google_api_key else '❌ Missing'}"
+    )
     print()
 
     print("💾 Database:")

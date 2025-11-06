@@ -8,8 +8,12 @@ from datetime import datetime
 
 from src.keep_agent_running.config import settings
 from src.keep_agent_running.mock_implementations import (
-    MockProjectRuntime, MockVE, MockUser, MockConvergenceManager,
-    MockLoopDetector, MockSharedContext
+    MockProjectRuntime,
+    MockVE,
+    MockUser,
+    MockConvergenceManager,
+    MockLoopDetector,
+    MockSharedContext,
 )
 
 
@@ -20,16 +24,40 @@ async def create_demo_runtime() -> MockProjectRuntime:
 
     # Create Virtual Environments
     ves = [
-        MockVE(name="GPT-4-Advanced", model_type="gpt-4", capabilities=["reasoning", "coding", "analysis"]),
-        MockVE(name="Claude-3.5-Sonnet", model_type="claude-3.5", capabilities=["reasoning", "writing", "coding"]),
-        MockVE(name="Code-Specialist", model_type="code-llm", capabilities=["coding", "debugging", "refactoring"])
+        MockVE(
+            name="GPT-4-Advanced",
+            model_type="gpt-4",
+            capabilities=["reasoning", "coding", "analysis"],
+        ),
+        MockVE(
+            name="Claude-3.5-Sonnet",
+            model_type="claude-3.5",
+            capabilities=["reasoning", "writing", "coding"],
+        ),
+        MockVE(
+            name="Code-Specialist",
+            model_type="code-llm",
+            capabilities=["coding", "debugging", "refactoring"],
+        ),
     ]
 
     # Create Human Experts
     experts = [
-        MockUser(id="expert-1", name="Senior Architect", expertise=["architecture", "distributed-systems"]),
-        MockUser(id="expert-2", name="ML Specialist", expertise=["machine-learning", "data-science"]),
-        MockUser(id="expert-3", name="DevOps Engineer", expertise=["deployment", "monitoring", "infrastructure"])
+        MockUser(
+            id="expert-1",
+            name="Senior Architect",
+            expertise=["architecture", "distributed-systems"],
+        ),
+        MockUser(
+            id="expert-2",
+            name="ML Specialist",
+            expertise=["machine-learning", "data-science"],
+        ),
+        MockUser(
+            id="expert-3",
+            name="DevOps Engineer",
+            expertise=["deployment", "monitoring", "infrastructure"],
+        ),
     ]
 
     # Create supporting components
@@ -51,11 +79,11 @@ async def create_demo_runtime() -> MockProjectRuntime:
             "token_limit": settings.resources.max_token_budget,
             "time_limit": settings.resources.max_session_timeout,
             "max_iterations": settings.resources.max_iterations,
-            "quality_threshold": settings.convergence.goal_satisfaction_threshold
+            "quality_threshold": settings.convergence.goal_satisfaction_threshold,
         },
         convergence_manager=convergence_manager,
         loop_prevention=loop_detector,
-        context_manager=shared_context
+        context_manager=shared_context,
     )
 
     return runtime
@@ -64,9 +92,9 @@ async def create_demo_runtime() -> MockProjectRuntime:
 async def demonstrate_configuration():
     """Show current configuration"""
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("📋 CURRENT CONFIGURATION")
-    print("="*60)
+    print("=" * 60)
 
     print(f"🚀 Project: {settings.project_name}")
     print(f"🌍 Environment: {settings.environment}")
@@ -98,26 +126,26 @@ async def demonstrate_configuration():
 async def run_demo_scenarios():
     """Run different demo scenarios"""
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🎬 DEMO SCENARIOS")
-    print("="*60)
+    print("=" * 60)
 
     scenarios = [
         {
             "name": "Simple Query",
             "query": "Create a hello world application",
-            "description": "Basic linear task execution"
+            "description": "Basic linear task execution",
         },
         {
             "name": "Complex Project",
             "query": "Build a distributed microservices system with real-time monitoring",
-            "description": "Multi-level task decomposition with branching"
+            "description": "Multi-level task decomposition with branching",
         },
         {
             "name": "Critical Review Task",
             "query": "Review and approve the security architecture for production deployment",
-            "description": "Human expert involvement scenario"
-        }
+            "description": "Human expert involvement scenario",
+        },
     ]
 
     for i, scenario in enumerate(scenarios, 1):
@@ -139,22 +167,24 @@ async def run_demo_scenarios():
             print(f"\n📊 Scenario {i} Results:")
             print(f"   Duration: {(end_time - start_time).total_seconds():.2f}s")
             print(f"   Success: {results['success']}")
-            print(f"   Tasks: {results['total_tasks']} total, {results['completed_tasks']} completed")
+            print(
+                f"   Tasks: {results['total_tasks']} total, {results['completed_tasks']} completed"
+            )
             print(f"   Artifacts: {results['artifacts_generated']}")
 
         except Exception as e:
             print(f"❌ Scenario {i} failed: {e}")
 
-        print("\n" + "-"*40)
+        print("\n" + "-" * 40)
         await asyncio.sleep(0.5)  # Brief pause between scenarios
 
 
 async def test_configuration_overrides():
     """Test configuration override functionality"""
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🔧 CONFIGURATION OVERRIDE TEST")
-    print("="*60)
+    print("=" * 60)
 
     print("Original settings:")
     print(f"   Max Parallel Agents: {settings.resources.max_parallel_agents}")
@@ -187,9 +217,9 @@ async def main():
         # Run demo scenarios
         await run_demo_scenarios()
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("✅ DEMO COMPLETED SUCCESSFULLY")
-        print("="*60)
+        print("=" * 60)
 
         print("\n🎯 What was demonstrated:")
         print("   ✅ Protocol-based architecture with clear interfaces")
