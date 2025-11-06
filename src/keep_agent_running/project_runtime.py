@@ -37,10 +37,29 @@ def run_project(
     tasks: list[Task] = pydantic_converter.convert_into_pydantic_model_list(r, Task)
     streamer.stream(f"Tasks: {tasks}")
 
-    # while tasks:
-    #     task = tasks.pop(0)
-    #     task_handler = task_assignment_handler.handle(task)
-    #     result = task_handler.handle(task)
+    total_tasks_generated = len(tasks)
+    total_tasks_completed = 0
+
+    while tasks:
+        task = tasks.pop(0)
+        # choose a handler
+        task_handler = task_assignment_handler.handle(task)
+        result = task_handler.handle(task)
+
+        # update situation
+        convergence_manager.update_situation(result)
+        total_tasks_completed += 1        
+        # see if we add new tasks to the queue, based on the goal
+        task_of_generating_new_tasks = Task(
+            objective="Generate new tasks",
+            description="Generate new tasks based on the goal",
+        )
+        new_tasks = orchestration_task_handler.handle(task_of_generating_new_tasks)
+        new_tasks = pydantic_converter.convert_into_pydantic_model_list(new_tasks, Task)
+        tasks.extend(new_tasks)
+        total_tasks_generated += len(new_tasks)
+        
+
 
 
 
