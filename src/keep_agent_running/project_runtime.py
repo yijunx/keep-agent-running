@@ -1,12 +1,16 @@
 from typing import Callable
 from pydantic import BaseModel
 from typing import Type
+from openai import OpenAI
+
+from src.keep_agent_running.utils import PydanticConverter, LLMConfig
 
 
-class Model: ...
 
+class Task(BaseModel):
+    objective: str
+    description: str
 
-class Task: ...
 
 
 class TreeStructure:
@@ -21,50 +25,53 @@ class ConvergenceManager: ...
 class Situation: ...
 
 
-def printing_callback(message: str) -> None:
-    print(message)
-
-
-def make_output_into_pydantic_models(
-    output: str, pydantic_model: Type[BaseModel], llm: Model
-) -> BaseModel:
-    response = llm.generate(
-        system_prompt=system_prompt,
-        user_prompt=output,
-    )
-    return pydantic_model.model_validate_json(output)
+class Streamer:
+    def stream(self, message: str) -> None:
+        print(message)
 
 
 class TaskHandler:
     def __init__(
         self,
-        model: Model,
-        streaming_callback: Callable[[str], None],
-        system_prompt: str,
+        llm_config: LLMConfig,
+        description: str,
+        system_prompt: str
     ):
-        self.model = model
-        self.streaming_callback = streaming_callback
+        self.llm_config = llm_config
+        self.description = description
         self.system_prompt = system_prompt
 
-    def handle(self, task: Task) -> list[Task]: ...
+    def handle(self, task: Task) -> str:
+        llm = OpenAI(base_url=self.llm_config.base_url, api_key=self.llm_config.api_key)
+        response = llm.chat.completions.create(
+            model=self.llm_config.model_name,
+            messages=[
+                {"role": "system", "content": self.system_prompt},
+                {"role": "user", "content": task.description},
+            ],
+        )
+        return response.choices[0].message.content
+
 
 
 def run_project(
     orchestration_task_handler: TaskHandler,  # how to do it
+    task_assignment_handler: TaskHandler,  # how to assign tasks to resources
     initial_task: Task,  # what to do
     task_handlers: list[TaskHandler],  # what resources can be used
     convergence_manager: ConvergenceManager,  # how to stop
-    streaming_callback: Callable[[str], None],  # how to stream the results
+    streamer: Streamer,  # how to stream the stuff out
+    pydantic_converter: PydanticConverter,
 ) -> TreeStructure:
-    tasks: list[Task] = orchestration_task_handler.handle(intial_task)
+    r = orchestration_task_handler.handle(initial_task)
+    tasks: list[Task] = pydantic_converter.convert_into_pydantic_model_list(r, Task)
+    streamer.stream(f"Tasks: {tasks}")
+
+    # while tasks:
+    #     task = tasks.pop(0)
+    #     task_handler = task_assignment_handler.handle(task)
+    #     result = task_handler.handle(task)
 
 
-if __name__ == "__main__":
-    t = run_project(
-        orchestration_model=Model(),
-        object_or_query="",
-        task_handlers=[],
-        convergence_manager=ConvergenceManager(),
-        streaming_callback=printing_callback,
-    )
-    t.pretty_print()
+
+

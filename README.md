@@ -300,3 +300,26 @@ This architecture incorporates convergence strategies learned from industry lead
 7. **Build background processing** for long-running tasks
 
 
+## interations
+
+initial_task = Task(
+    objective="Learn how to play bass in a week",
+    description="Learn how to play bass in a week, i want need to be able play root notes for my band",
+)
+
+gives: 
+Tasks: [
+Task(objective='Learn the notes on each string of the bass', description='Start by memorizing the notes on each string of the bass. Use a tuner or your phone to find the correct notes. If your friend is playing guitar, you can play together to match the notes.'), 
+
+Task(objective='Practice playing single notes in time', description="Use a metronome or play along with some backing tracks to get the feel right. Make sure you're holding the bass correctly and have the right posture to avoid any injuries."), 
+
+Task(objective='Learn to play root notes for common chords', description='If the band plays a chord, you should play the root note of that chord on your bass. Practice playing root notes along with the chords your band is playing.'), 
+
+Task(objective='Practice playing root notes with the rest of the band', description="Join the band to play root notes for their chord progressions. If you can't practice with the band, you can play along with their backing track."), 
+
+Task(objective='Learn to play root notes in different positions', description='Practice playing root notes in different positions on the fretboard. This will help you become more comfortable with the fretboard and improve your knowledge of the strings.'), 
+
+Task(objective='Learn to play root notes in different octaves', description='Practice playing root notes in different octaves. This will help you become more comfortable with the fretboard and improve your knowledge of the strings.'), 
+
+Task(objective='Learn to play root notes in different scales', description='Learn to play root notes in different scales. This will help you become more comfortable with the fretboard and improve your knowledge of the strings.')
+]
