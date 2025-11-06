@@ -253,9 +253,37 @@ runtime = ProjectRuntime(
 runtime.start(monitor_convergence=True)
 ```
 
+## Quick Start - Demo Examples
+
+Want to see it in action? Start with these simple demos:
+
+### 🛒 Shopping List Organizer (10 seconds)
+```bash
+python examples/shopping_list_demo.py
+```
+Demonstrates BFS parallel classification. Takes random items, organizes by store section.
+
+### 📧 Email Triage (20 seconds)
+```bash
+python examples/email_triage_demo.py
+```
+Demonstrates BFS parallel processing. Sorts 5 emails by priority with action items.
+
+### 📐 Math Tutor (30 seconds)
+```bash
+python examples/math_tutor_demo.py
+```
+Demonstrates DFS step-by-step breakdown. Solves algebra problem with explanations.
+
+**More demos**: See [DEMO_USE_CASES.md](DEMO_USE_CASES.md) for 8 simple, runnable examples.
+
+**Production use cases**: See [USE_CASES.md](USE_CASES.md) for 7 real-world scenarios.
+
+---
+
 ## Status
 
-🚧 **Under Development** - This README documents the intended architecture. Implementation is in progress.
+🚧 **Under Development** - Core handlers implemented, testing with demo use cases.
 
 ## Industry Research & References
 
