@@ -269,8 +269,8 @@ The LLM itself does this reasoning, creating truly adaptive decomposition.
 
 - **[DEMO_USE_CASES.md](DEMO_USE_CASES.md)** - 8 simple demos
 - **[USE_CASES.md](USE_CASES.md)** - 7 production scenarios
-- **[examples/math_tutor_demo.py](examples/math_tutor_demo.py)** - Runnable code
-- **[examples/README.md](examples/README.md)** - Demo guide
+- **[examples/math_tutor_demo.py](../examples/math_tutor_demo.py)** - Runnable code
+- **[examples/README.md](../examples/README.md)** - Demo guide
 
 ---
 

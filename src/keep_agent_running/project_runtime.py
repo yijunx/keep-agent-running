@@ -25,8 +25,8 @@ class Streamer:
 
 
 def run_project(
-    orchestration_task_handler: TaskHandler,  # how to do it
-    task_assignment_handler: TaskHandler,  # how to assign tasks to resources
+    orchestration_task_handler: TaskHandler,  # how to do it (the planner)
+    task_assignment_handler: TaskHandler,  # how to assign tasks to resources (the router)
     initial_task: Task,  # what to do, the goal
     task_handlers: list[TaskHandler],  # what resources can be used
     convergence_manager: ConvergenceManager,  # how to stop

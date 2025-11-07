@@ -298,17 +298,17 @@ python examples/support_ticket_example.py
 ## Resources
 
 ### Documentation
-- [README.md](README.md) - Architecture overview
+- [README.md](../README.md) - Architecture overview
 - [USE_CASES.md](USE_CASES.md) - Detailed use cases
-- [handlers.py](src/keep_agent_running/models/handlers.py) - Handler implementations
+- [handlers.py](../src/keep_agent_running/models/handlers.py) - Handler implementations
 
 ### Examples
-- [support_ticket_example.py](examples/support_ticket_example.py) - Full working example
-- [main2.py](main2.py) - Simple orchestration example
+- [support_ticket_example.py](../examples/support_ticket_example.py) - Full working example
+- [main2.py](../main2.py) - Simple orchestration example
 
 ### Configuration
-- [config.py](src/keep_agent_running/config.py) - System configuration
-- [pyproject.toml](pyproject.toml) - Dependencies
+- [config.py](../src/keep_agent_running/config.py) - System configuration
+- [pyproject.toml](../pyproject.toml) - Dependencies
 
 ### References
 - OpenAI Swarm - Single-agent control loop patterns

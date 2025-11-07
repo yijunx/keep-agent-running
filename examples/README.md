@@ -22,7 +22,28 @@ python examples/shopping_list_demo.py
 
 ---
 
-### 2. 📧 Email Triage
+### 2. 🍳 Recipe Finder (Human-in-the-Loop) ⭐ NEW!
+**File**: `recipe_finder_demo.py`  
+**Time**: 2-3 minutes  
+**Cost**: $0.03-0.05  
+
+Plans dinner, sends human to market, adapts recipe based on findings.
+
+```bash
+python examples/recipe_finder_demo.py
+```
+
+**What it demonstrates**:
+- ✅ Human handler integration (market reconnaissance)
+- ✅ Adaptive planning based on real-world input
+- ✅ BFS exploration → DFS refinement
+- ✅ Context-aware adaptation (fresh salmon changes the plan!)
+
+**Key insight**: System adapts from "frozen chicken stir-fry" to "Mediterranean salmon pasta" after human reports fresh salmon on sale at market!
+
+---
+
+### 3. 📧 Email Triage
 **File**: `email_triage_demo.py`  
 **Time**: 20 seconds  
 **Cost**: $0.01  
@@ -40,7 +61,7 @@ python examples/email_triage_demo.py
 
 ---
 
-### 3. 📐 Math Tutor
+### 4. 📐 Math Tutor
 **File**: `math_tutor_demo.py`  
 **Time**: 30 seconds  
 **Cost**: $0.02  
@@ -84,6 +105,7 @@ python examples/support_ticket_example.py
 | Demo | Time | Cost | Complexity | Best For |
 |------|------|------|------------|----------|
 | **Shopping List** | 10s | $0.005 | ⭐ | First demo |
+| **Recipe Finder** | 2-3min | $0.03 | ⭐⭐⭐ | Human handler showcase |
 | **Email Triage** | 20s | $0.01 | ⭐⭐ | BFS showcase |
 | **Math Tutor** | 30s | $0.02 | ⭐⭐ | DFS showcase |
 | **Support Tickets** | 2-3min | $0.05 | ⭐⭐⭐⭐ | Full system |
@@ -102,7 +124,16 @@ python examples/support_ticket_example.py
 ```bash
 # From project root
 cd /Users/xuyijun/projects/keep-agent-running
-python examples/shopping_list_demo.py
+
+# Start simple
+python examples/shopping_list_demo.py     # 10 seconds
+
+# Then try human-in-the-loop
+python examples/recipe_finder_demo.py     # 2-3 minutes, shows adaptation!
+
+# BFS and DFS examples
+python examples/email_triage_demo.py      # 20 seconds  
+python examples/math_tutor_demo.py        # 30 seconds
 ```
 
 ### Expected Output
@@ -110,6 +141,7 @@ Each demo prints:
 1. **Input** - What problem we're solving
 2. **Progress** - What the system is doing (streamed)
 3. **Output** - Final result, nicely formatted
+4. **Human interaction** - (Recipe Finder only) Simulated market visit
 
 ---
 
@@ -124,6 +156,25 @@ Orchestrator: Break into 10 classification tasks
 BFS: Process all 10 in parallel
   ↓
 Output: Organized by section
+```
+
+### Recipe Finder (BFS → Human → DFS Adaptation)
+```
+Input: "Make dinner, limited ingredients at home"
+  ↓
+Phase 1 (BFS): Explore options
+├── Brainstorm with home ingredients → "Chicken stir-fry possible"
+└── Send human to market → "Go check what's fresh"
+  ↓
+Human returns: "Fresh salmon 50% off! Tomatoes, basil fresh!"
+  ↓
+Phase 2 (DFS): Adapt and refine
+├── Optimizer: "Salmon better than frozen chicken!"
+└── Generate: Detailed Mediterranean Salmon Pasta recipe
+  ↓
+Output: Better dish than originally possible!
+
+KEY: System ADAPTED plan based on real-world human input!
 ```
 
 ### Math Tutor (DFS)

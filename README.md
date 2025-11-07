@@ -263,6 +263,12 @@ python examples/shopping_list_demo.py
 ```
 Demonstrates BFS parallel classification. Takes random items, organizes by store section.
 
+### 🍳 Recipe Finder with Human (2-3 minutes) ⭐ NEW!
+```bash
+python examples/recipe_finder_demo.py
+```
+Demonstrates **human-in-the-loop** + adaptive planning. Plans dinner, sends human to market, adapts recipe based on what's fresh/on sale. Shows context-driven adaptation!
+
 ### 📧 Email Triage (20 seconds)
 ```bash
 python examples/email_triage_demo.py
@@ -273,11 +279,13 @@ Demonstrates BFS parallel processing. Sorts 5 emails by priority with action ite
 ```bash
 python examples/math_tutor_demo.py
 ```
-Demonstrates DFS step-by-step breakdown. Solves algebra problem with explanations.
+Demonstrates DFS step-by-step breakdown + goal-driven adaptation. Solves 3 problems showing how complexity changes task decomposition.
 
-**More demos**: See [DEMO_USE_CASES.md](DEMO_USE_CASES.md) for 8 simple, runnable examples.
+**More demos**: See [DEMO_USE_CASES.md](documents/DEMO_USE_CASES.md) for 8 simple, runnable examples.
 
-**Production use cases**: See [USE_CASES.md](USE_CASES.md) for 7 real-world scenarios.
+**Production use cases**: See [USE_CASES.md](documents/USE_CASES.md) for 7 real-world scenarios.
+
+**Traversal strategies**: See [STRATEGY_SUMMARY.md](documents/STRATEGY_SUMMARY.md) for BFS/DFS/Best-First/Beam Search/A* and more.
 
 ---
 

@@ -4,37 +4,60 @@ Simple, runnable examples to demonstrate BFS/DFS problem solving.
 
 ---
 
-## Demo 1: Recipe Finder (5 minutes)
+## Demo 1: Recipe Finder with Human-in-the-Loop ⭐
 
-**Goal**: Find a recipe based on ingredients you have at home.
+**Goal**: Plan tonight's dinner (with market reconnaissance!)
 
-**Why it's simple**:
-- Clear input (ingredients list)
-- Clear output (recipe with instructions)
-- No external dependencies needed
-- Easy to understand BFS → DFS flow
+**Why this demonstrates human handler**:
+- **Starts** with limited home ingredients
+- **Human goes to market** to check what's fresh/on sale
+- **System adapts** recipe based on real-world findings
+- Shows how human input changes the execution path!
 
 ### Task Flow
 
 ```
-Input: "I have chicken, rice, and soy sauce"
+Input: "I have frozen chicken, rice, eggs at home. Budget $20 for market."
 
-[BFS] Find possible recipes (parallel search)
-├── [SmolModel] Classify cuisine type → Asian
-├── [SmolModel] Find 5 matching recipes
-└── [SmolModel] Rate each recipe (1-10)
+[BFS Phase 1] Initial exploration
+├── [SmolModel] Brainstorm recipes with home ingredients
+│   → Could make: Chicken stir-fry, fried rice, egg drop soup
+└── [Human] Go to market, check what's fresh/on sale
+    ↓
+    Human reports back:
+    "Fresh salmon 50% off! Cherry tomatoes, basil, lemons all fresh!"
 
-[DFS] Get details for top recipe
-├── [LLM] Generate full recipe with steps
-├── [LLM] Suggest ingredient substitutions
-└── [LLM] Estimate cooking time and difficulty
+[DFS Phase 2] Adapt based on market findings
+├── [LLM] Optimize recipe choice
+│   → Original: Chicken stir-fry (frozen chicken, okay)
+│   → NEW: Mediterranean Salmon Pasta (fresh salmon, amazing!)
+└── [LLM] Generate detailed recipe with fresh ingredients
+    → Full recipe with steps, wine pairing, tips
 
-Output: Complete recipe with steps
+Output: Better recipe than originally possible!
 ```
 
-**Handlers**: SmolModel (2-3 calls), LLM (1-2 calls)
-**Time**: 30 seconds
-**Cost**: $0.01
+**Key Insight**: SAME GOAL, DIFFERENT PATH
+```
+Goal: "Make dinner tonight"
+
+Original context (home only):
+  → Frozen chicken stir-fry
+  → 6/10 meal
+  → Uses what we have
+
+After market visit (human input):
+  → Fresh salmon pasta
+  → 9/10 meal  
+  → Takes advantage of deals
+  
+The system ADAPTED based on real-world human reconnaissance!
+Like 130kg→120kg vs 200kg→120kg: context changes the approach.
+```
+
+**Handlers**: SmolModel, LLM, **Human** (market scout)
+**Time**: 2-3 minutes (includes mock market visit)
+**Cost**: $0.03-0.05
 
 ---
 
