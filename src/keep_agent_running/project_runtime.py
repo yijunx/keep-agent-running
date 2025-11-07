@@ -6,6 +6,34 @@ from .utils import PydanticConverter, LLMConfig
 from .models.handlers import Task, TaskHandler
 
 
+class HighLevelTask(BaseModel):
+    identifier: str
+    description: str
+    upstreams: list[str]
+
+
+class ProjectProperties(BaseModel):
+    general_objective: str  # create recipy for dinner
+    heuristics: str
+    precautions: list[str]
+    success_criteria: list[str]
+    # contraint on budget (this dinner cost, within 400)
+    # time whole cooking process, within 1 hour
+
+    high_level_workflow: list[HighLevelTask] # paragraph or bullet points
+    # as a reference for runner
+
+    things_to_inlude_in_output: list[str]
+
+    input_description: str
+    # how does your project user state his specific needs
+    # more for tooltips
+    # pls describe what you want to eat, what left in your frigde, what appliances you have
+    # any market near by, so the project runs better
+
+    # ...
+    resources: list["Resource"]
+
 
 class TreeStructure:
     ...
@@ -25,6 +53,7 @@ class Streamer:
 
 
 def run_project(
+    project_properties: ProjectProperties,
     orchestration_task_handler: TaskHandler,  # how to do it (the planner)
     task_assignment_handler: TaskHandler,  # how to assign tasks to resources (the router)
     initial_task: Task,  # what to do, the goal
